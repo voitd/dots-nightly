@@ -1,0 +1,7 @@
+[user]
+	name = voitd
+	email = dimytr.voitenko@gmail.com
+[color]
+	ui = true
+[credential]
+	helper = osxkeychain
