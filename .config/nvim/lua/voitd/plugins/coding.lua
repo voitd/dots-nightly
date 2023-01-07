@@ -88,4 +88,59 @@ return {
 	{ "JoosepAlviste/nvim-ts-context-commentstring" },
 	-- auto tag rename
 	{ "windwp/nvim-ts-autotag", event = "VeryLazy" },
+	-- repl like virtual line
+	{
+		"metakirby5/codi.vim",
+		keys = {
+			{
+				"<leader>tc",
+				"<cmd>Codi!! <CR>",
+				desc = "Toggle Codi",
+			},
+			{
+				"<leader>tce",
+				"<cmd>CodiExpand <CR>",
+				desc = "Toggle Codi Expand",
+			},
+			-- config = function()
+			--        highlight CodiVirtualText guifg=red
+			--
+			--        vim.g.codi#virtual_text_prefix = "❯ "
+			--
+			--        vim.g.codi#aliases = {
+			--                  \ 'javascript.jsx': 'javascript',
+			--                  \ }
+			--
+			--        vim.g.codi#aliases = {
+			--                  \ 'javascriptreact': 'javascript',
+			--                  \ }
+			-- end,
+		},
+	},
+	-- code runer
+	{
+		"CRAG666/code_runner.nvim",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		event = "VeryLazy",
+		keys = {
+			{
+				"<leader>cr",
+				"<cmd>:RunCode<CR>",
+				desc = "Code Run",
+			},
+		},
+		config = function()
+			require("code_runner").setup({
+				mode = "float",
+				filetype = {
+					javascript = "node",
+					python = "python3 -u",
+					-- typescript = "deno run",
+				},
+				float = {
+					border = "single",
+				},
+			})
+		end,
+	},
 }

@@ -1,11 +1,9 @@
 return {
 
 	-- better text objects
-	{
-		"echasnovski/mini.ai",
-
-		event = "VeryLazy",
-	},
+	-- {
+	-- 	"echasnovski/mini.ai",
+	-- },
 
 	-- auto pairs
 	{
@@ -42,44 +40,6 @@ return {
 		end,
 	},
 
-	-- pretty cursor animation
-	{
-		"echasnovski/mini.animate",
-		event = "VeryLazy",
-		config = function()
-			local mouse_scrolled = false
-			for _, scroll in ipairs({ "Up", "Down" }) do
-				local key = "<ScrollWheel" .. scroll .. ">"
-				vim.keymap.set("", key, function()
-					mouse_scrolled = true
-					return key
-				end, { expr = true })
-			end
-
-			local animate = require("mini.animate")
-			vim.go.winwidth = 20
-			vim.go.winminwidth = 5
-
-			animate.setup({
-				resize = {
-					timing = animate.gen_timing.linear({ duration = 100, unit = "total" }),
-				},
-				scroll = {
-					timing = animate.gen_timing.linear({ duration = 150, unit = "total" }),
-					subscroll = animate.gen_subscroll.equal({
-						predicate = function(total_scroll)
-							if mouse_scrolled then
-								mouse_scrolled = false
-								return false
-							end
-							return total_scroll > 1
-						end,
-					}),
-				},
-			})
-		end,
-	},
-
 	-- buffer remove
 	{
 		"echasnovski/mini.bufremove",
@@ -101,7 +61,7 @@ return {
 			},
 		},
 	},
-	-- suround
+	-- surround
 	{
 		"echasnovski/mini.surround",
 		event = "VeryLazy",

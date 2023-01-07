@@ -43,6 +43,7 @@ vim.opt.undolevels = 10000
 vim.opt.updatetime = 200 -- save swap file and trigger CursorHold
 vim.opt.wildmode = "longest:full,full" -- Command-line completion mode
 vim.opt.wrap = false -- Disable line wrap
+vim.go.winminwidth = 5 -- minimum window width
 vim.opt.swapfile = false -- Disable swap
 vim.opt.iskeyword:append("-") -- consider string-string as whole word
 

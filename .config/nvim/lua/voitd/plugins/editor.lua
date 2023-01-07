@@ -187,6 +187,7 @@ return {
 					augend.integer.alias.decimal,
 					augend.integer.alias.hex,
 					augend.date.alias["%Y/%m/%d"],
+					augend.date.alias["%d-%m-%Y"],
 					augend.constant.alias.bool,
 					augend.semver.alias.semver,
 				},
@@ -196,7 +197,6 @@ return {
 
 	{
 		"PatschD/zippy.nvim",
-		event = "VeryLazy",
 		keys = {
 			{
 				"<leader>pl",
@@ -206,68 +206,5 @@ return {
 				desc = "Print in console",
 			},
 		},
-	},
-	{
-		"metakirby5/codi.vim",
-		event = "VeryLazy",
-		keys = {
-			{
-				"<leader>tc",
-				"<cmd>Codi!! <CR>",
-				desc = "Toggle Codi",
-			},
-			{
-				"<leader>tce",
-				"<cmd>CodiExpand <CR>",
-				desc = "Toggle Codi Expand",
-			},
-		},
-		-- config = function()
-		-- 	vim.cmd([[
-		--        highlight CodiVirtualText guifg=red
-		--
-		--        let g:codi#virtual_text_prefix = "❯ "
-		--
-		--        let g:codi#aliases = {
-		--                  \ 'javascript.jsx': 'javascript',
-		--                  \ }
-		--
-		--        let g:codi#aliases = {
-		--                  \ 'javascriptreact': 'javascript',
-		--                  \ }
-		--    ]])
-		-- end,
-	},
-
-	{
-		"CRAG666/code_runner.nvim",
-		dependencies = { "nvim-lua/plenary.nvim" },
-		event = "VeryLazy",
-		keys = {
-			{
-				"<leader>rc",
-				"<cmd>:RunCode<CR>",
-				desc = "[R]un [C]ode",
-			},
-		},
-		config = function()
-			require("code_runner").setup({
-				mode = "float",
-				filetype = {
-					javascript = "node",
-					python = "python3 -u",
-					-- typescript = "deno run",
-				},
-			})
-		end,
-	},
-
-	{
-		"narutoxy/dim.lua",
-		event = "VeryLazy",
-		dependencies = { "nvim-treesitter/nvim-treesitter", "neovim/nvim-lspconfig" },
-		config = function()
-			require("dim").setup({})
-		end,
 	},
 }

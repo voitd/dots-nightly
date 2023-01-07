@@ -24,22 +24,22 @@ symbol = " "
 disabled = false
 threshold = -1
 format= "[  ${ram}( ${swap}) ]($style)"
-style = "bold #ffffff bg:#444444"
+style = "bold #ffffff "
 
 [status]
 disabled = false
 format='[ $symbol $status ]($style)'
-style = "bold white bg:#ff1664"
+style = "bold white fg:#ff1664"
 
 [cmd_duration]
 min_time = 0
-style= "#f5f96c bg:#444444"
+style= "#f5f96c "
 format = '[ ﲊ $duration ]($style)'
 
 [time]
 disabled = false
 format = '[  $time ]($style)'
-style= 'bold #8498ff bg:#444444'
+style= 'bold #8498ff '
 
 [directory]
 truncation_length = 8
@@ -65,13 +65,13 @@ disabled=false
 format="[ $symbol$percentage ]($style)"
 [[battery.display]]
 threshold = 20
-style = "bold red bg:#444444"
+style = "bold red "
 [[battery.display]]
 threshold = 50
-style = "bold yellow bg:#444444"
+style = "bold yellow "
 [[battery.display]]
 threshold = 100
-style = "bold #aef58d bg:#444444"
+style = "bold #aef58d "
 
 [shlvl]
 threshold=2

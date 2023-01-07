@@ -90,9 +90,9 @@ return {
 				},
 			},
 			presets = {
-				bottom_search = true,
-				command_palette = true,
-				long_message_to_split = true,
+				bottom_search = false,
+				command_palette = false,
+				long_message_to_split = false,
 			},
 			cmdline = {
 				view = "cmdline",
@@ -152,7 +152,7 @@ return {
 			end
 
 			vim.api.nvim_create_autocmd("User", {
-				pattern = "voitdStarted",
+				pattern = "LazyVimStarted",
 				callback = function()
 					local stats = require("lazy").stats()
 					local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
@@ -174,10 +174,9 @@ return {
 		keys = { { "<leader>Z", "<cmd>WindowsMaximize<cr>", desc = "Zoom Window" } },
 		config = function()
 			vim.o.winwidth = 5
-			vim.o.winminwidth = 5
 			vim.o.equalalways = false
 			require("windows").setup({
-				animation = { enable = true, duration = 150 },
+				animation = { enable = false, duration = 150 },
 			})
 		end,
 	},
@@ -237,10 +236,9 @@ return {
 		config = { use_default_keymaps = false, max_join_length = 150 },
 	},
 
-	{ "folke/twilight.nvim", event = "VeryLazy" },
+	{ "folke/twilight.nvim" },
 	{
 		"folke/zen-mode.nvim",
-		event = "VeryLazy",
 		cmd = "ZenMode",
 		config = {
 			plugins = {
