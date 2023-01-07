@@ -1,5 +1,4 @@
 return {
-
 	-- snippets
 	{
 		"L3MON4D3/LuaSnip",
@@ -32,13 +31,23 @@ return {
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-path",
-			"hrsh7th/cmp-emoji",
+			"hrsh7th/cmp-cmdline",
 			"saadparwaiz1/cmp_luasnip",
 		},
 		config = function()
 			local cmp = require("cmp")
 			local snip = require("luasnip")
+			-- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+			cmp.setup.cmdline({ "/", "?" }, {
+				mapping = cmp.mapping.preset.cmdline(),
+				sources = {
+					{ name = "buffer" },
+				},
+			})
 			cmp.setup({
+				completion = {
+					completeopt = "menu,menuone,noinsert",
+				},
 				snippet = {
 					expand = function(args)
 						snip.lsp_expand(args.body)
@@ -50,40 +59,16 @@ return {
 					["<C-Space>"] = cmp.mapping.complete(),
 					["<C-e>"] = cmp.mapping.abort(),
 					["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-					["<Tab>"] = cmp.mapping(function(fallback)
-						if snip.jumpable(1) then
-							snip.jump(1)
-						elseif cmp.visible() then
-							cmp.select_next_item()
-						elseif snip.expandable() then
-							snip.expand()
-						elseif has_words_before() then
-							cmp.complete()
-						else
-							fallback()
-						end
-					end, { "i", "s" }),
-					-- Shift-Tab selects the previous placeholder, the previous item, or calls the fallback
-					["<S-Tab>"] = cmp.mapping(function(fallback)
-						if snip.jumpable(-1) then
-							snip.jump(-1)
-						elseif cmp.visible() then
-							cmp.select_prev_item()
-						else
-							fallback()
-						end
-					end, { "i", "s" }),
 				}),
 				sources = cmp.config.sources({
 					{ name = "nvim_lsp" },
 					{ name = "luasnip" },
 					{ name = "buffer" },
 					{ name = "path" },
-					{ name = "emoji" },
 				}),
 				formatting = {
 					format = function(_, item)
-						local icons = require("lazyvim.config.icons").kinds
+						local icons = require("voitd.config.icons").kinds
 						if icons[item.kind] then
 							item.kind = icons[item.kind] .. item.kind
 						end
@@ -99,28 +84,8 @@ return {
 		end,
 	},
 
-	-- auto pairs
-	{
-		"echasnovski/mini.pairs",
-		event = "VeryLazy",
-		config = function()
-			require("mini.pairs").setup({})
-		end,
-	},
-
 	-- comments
 	{ "JoosepAlviste/nvim-ts-context-commentstring" },
-	{
-		"echasnovski/mini.comment",
-		event = "VeryLazy",
-		config = function()
-			require("mini.comment").setup({
-				hooks = {
-					pre = function()
-						require("ts_context_commentstring.internal").update_commentstring({})
-					end,
-				},
-			})
-		end,
-	},
+	-- auto tag rename
+	{ "windwp/nvim-ts-autotag", event = "VeryLazy" },
 }

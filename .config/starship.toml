@@ -1,0 +1,94 @@
+format = """[](bold green)$time$battery$cmd_duration$status$memory_usage
+[](bold green)
+[┌─](bold #aef58d)$username$hostname$shell$shlvl$jobs
+[│](bold #aef58d) $directory$golang\
+$git_branch\
+$git_commit\
+$git_state\
+$kubernetes\
+$git_metrics\
+$git_status\
+$hg_branch
+[└─](#aef58d)[ ❯ ](bold green)"""
+
+add_newline = false
+
+# [│](bold green)$time$battery$cmd_duration$status$memory_usage [└─>](bold green) format = """[┌───────────────────>](bold green)
+#[└─>](bold green) """
+#[└─ ](bold #aef58d)$character"""
+[fill]
+symbol = " "
+#style = "bold green bg:green"
+
+[memory_usage]
+disabled = false
+threshold = -1
+format= "[  ${ram}( ${swap}) ]($style)"
+style = "bold #ffffff bg:#444444"
+
+[status]
+disabled = false
+format='[ $symbol $status ]($style)'
+style = "bold white bg:#ff1664"
+
+[cmd_duration]
+min_time = 0
+style= "#f5f96c bg:#444444"
+format = '[ ﲊ $duration ]($style)'
+
+[time]
+disabled = false
+format = '[  $time ]($style)'
+style= 'bold #8498ff bg:#444444'
+
+[directory]
+truncation_length = 8
+truncation_symbol = "…/"
+truncate_to_repo=false
+use_logical_path=true
+
+[hostname]
+ssh_only = false
+format = "[@$hostname ](#f3175f)"
+trim_at = ".companyname.com"
+disabled = false
+
+[shell]
+unknown_indicator = "mystery shell"
+disabled = false
+format="[ $indicator ](bold fg:blue)"
+
+[character]
+disabled=false
+
+[battery]
+format="[ $symbol$percentage ]($style)"
+[[battery.display]]
+threshold = 20
+style = "bold red bg:#444444"
+[[battery.display]]
+threshold = 50
+style = "bold yellow bg:#444444"
+[[battery.display]]
+threshold = 100
+style = "bold #aef58d bg:#444444"
+
+[shlvl]
+threshold=2
+disabled=false
+
+[jobs]
+symbol = "+ "
+symbol_threshold=2
+disabled=true
+
+
+[username]
+#style_user = "white bold bg:green"
+style_user = "#ffd064"
+style_root = "#ff1664"
+#format = "[  $user]($style)"
+format = "[  $user]($style)"
+disabled = false
+show_always = true
+

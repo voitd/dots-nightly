@@ -26,7 +26,7 @@ function M.on_attach(client, buffer)
 	)
 	self:map("<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action", mode = { "n", "v" }, has = "codeAction" })
 
-	local format = require("lazyvim.plugins.lsp.format").format
+	local format = require("voitd.plugins.lsp.format").format
 	self:map("<leader>cf", format, { desc = "Format Document", has = "documentFormatting" })
 	self:map("<leader>cf", format, { desc = "Format Range", mode = "v", has = "documentRangeFormatting" })
 	self:map("<leader>rn", M.rename, { expr = true, desc = "Rename", has = "rename" })

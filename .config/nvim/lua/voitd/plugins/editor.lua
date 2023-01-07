@@ -1,5 +1,3 @@
-local util = require("lazyvim.util")
-
 return {
 	{ "tpope/vim-obsession", event = "VeryLazy" },
 	-- file explorer
@@ -10,7 +8,7 @@ return {
 			{
 				"<leader>ft",
 				function()
-					require("neo-tree.command").execute({ toggle = true, dir = require("lazyvim.util").get_root() })
+					require("neo-tree.command").execute({ toggle = true, dir = require("voitd.util").get_root() })
 				end,
 				desc = "NeoTree",
 			},
@@ -49,54 +47,29 @@ return {
 		},
 	},
 
-	-- fuzzy finder
 	{
-		"nvim-telescope/telescope.nvim",
-		cmd = "Telescope",
+		"folke/trouble.nvim",
+		requires = "kyazdani42/nvim-web-devicons",
 		keys = {
-			{ "<leader>/", util.telescope("live_grep"), desc = "Find in Files (Grep)" },
-			{ "<leader><space>", util.telescope("find_files"), desc = "Find Files" },
-			{ "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
-			{ "<leader>ff", util.telescope("find_files"), desc = "Find Files" },
-			{ "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent" },
-			{ "<leader>gc", "<Cmd>Telescope git_commits<CR>", desc = "commits" },
-			{ "<leader>gs", "<Cmd>Telescope git_status<CR>", desc = "status" },
-			{ "<leader>ha", "<cmd>Telescope autocommands<cr>", desc = "Auto Commands" },
-			{ "<leader>hc", "<cmd>Telescope commands<cr>", desc = "Commands" },
-			{ "<leader>hf", "<cmd>Telescope filetypes<cr>", desc = "File Types" },
-			{ "<leader>hh", "<cmd>Telescope help_tags<cr>", desc = "Help Pages" },
-			{ "<leader>hk", "<cmd>Telescope keymaps<cr>", desc = "Key Maps" },
-			{ "<leader>hm", "<cmd>Telescope man_pages<cr>", desc = "Man Pages" },
-			{ "<leader>ho", "<cmd>Telescope vim_options<cr>", desc = "Options" },
-			{ "<leader>hs", "<cmd>Telescope highlights<cr>", desc = "Search Highlight Groups" },
-			{ "<leader>ht", "<cmd>Telescope builtin<cr>", desc = "Telescope" },
-			{ "<leader>sb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Buffer" },
-			{ "<leader>sc", "<cmd>Telescope command_history<cr>", desc = "Command History" },
-			{ "<leader>sg", util.telescope("live_grep"), desc = "Grep" },
-			{ "<leader>sm", "<cmd>Telescope marks<cr>", desc = "Jump to Mark" },
-			{ "<leader>,", "<cmd>Telescope buffers show_all_buffers=true<cr>", desc = "Switch Buffer" },
-			{ "<leader>:", "<cmd>Telescope command_history<cr>", desc = "Command History" },
 			{
-				"<leader>ss",
-				util.telescope("lsp_document_symbols", {
-					symbols = {
-						"Class",
-						"Function",
-						"Method",
-						"Constructor",
-						"Interface",
-						"Module",
-						"Struct",
-						"Trait",
-						"Field",
-						"Property",
-					},
-				}),
-				desc = "Goto Symbol",
+				"<leader>td",
+				"<cmd>TroubleToggle<cr>",
+				desc = "Trouble",
 			},
 		},
-		config = true,
+
+		config = function()
+			require("trouble").setup({})
+		end,
 	},
+
+	-- {
+	-- 	"andymass/vim-matchup",
+	-- 	event = "BufReadPost",
+	-- 	config = function()
+	-- 		vim.g.matchup_matchparen_offscreen = { method = "status_manual" }
+	-- 	end,
+	-- },
 
 	-- easily jump to any location and enhanced f/t motions for Leap
 	{
@@ -131,6 +104,9 @@ return {
 				["<leader>f"] = { name = "+file" },
 				["<leader>g"] = { name = "+git" },
 				["<leader>h"] = { name = "+help" },
+				["<leader>w"] = { name = "+window" },
+				["<leader>s"] = { name = "+search" },
+				["<leader>t"] = { name = "+toggle" },
 				["<leader>x"] = { name = "+diagnostics" },
 			})
 		end,
@@ -150,6 +126,14 @@ return {
 				untracked = { text = "▎" },
 			},
 		},
+	},
+
+	-- git conflict resolve
+	{
+		"akinsho/git-conflict.nvim",
+		config = function()
+			require("git-conflict").setup()
+		end,
 	},
 
 	-- references
@@ -177,26 +161,39 @@ return {
 		},
 	},
 
-	-- buffer remove
+	-- better increase/descrease
 	{
-		"echasnovski/mini.bufremove",
+		"monaqa/dial.nvim",
 		keys = {
 			{
-				"<leader>bd",
+				"<C-a>",
 				function()
-					require("mini.bufremove").delete(0, false)
+					return require("dial.map").inc_normal()
 				end,
-				desc = "Delete Buffer",
+				expr = true,
 			},
 			{
-				"<leader>bD",
+				"<C-x>",
 				function()
-					require("mini.bufremove").delete(0, true)
+					return require("dial.map").dec_normal()
 				end,
-				desc = "Delete Buffer (Force)",
+				expr = true,
 			},
 		},
+		config = function()
+			local augend = require("dial.augend")
+			require("dial.config").augends:register_group({
+				default = {
+					augend.integer.alias.decimal,
+					augend.integer.alias.hex,
+					augend.date.alias["%Y/%m/%d"],
+					augend.constant.alias.bool,
+					augend.semver.alias.semver,
+				},
+			})
+		end,
 	},
+
 	{
 		"PatschD/zippy.nvim",
 		event = "VeryLazy",
@@ -215,14 +212,14 @@ return {
 		event = "VeryLazy",
 		keys = {
 			{
-				"<leader>cr",
+				"<leader>tc",
 				"<cmd>Codi!! <CR>",
-				desc = "[C]ode [R]un",
+				desc = "Toggle Codi",
 			},
 			{
-				"<leader>ce",
+				"<leader>tce",
 				"<cmd>CodiExpand <CR>",
-				desc = "[C]ode [E]xpand",
+				desc = "Toggle Codi Expand",
 			},
 		},
 		-- config = function()
@@ -241,35 +238,36 @@ return {
 		--    ]])
 		-- end,
 	},
-	-- {
-	-- 	"CRAG666/code_runner.nvim",
-	-- 	dependencies = { "nvim-lua/plenary.nvim" },
-	-- 	event = "VeryLazy",
-	-- 	config = function()
-	-- 		require("code_runner").setup({
-	-- 			mode = "float",
-	-- 			filetype = {
-	-- 				javascript = "node",
-	-- 				python = "python3 -u",
-	-- 				typescript = "deno run",
-	-- 			},
-	-- 		})
-	-- 	end,
-	-- },
-	-- {
-	-- 	"andrewferrier/debugprint.nvim",
-	-- 	event = "VeryLazy",
-	-- 	keys = {
-	-- 		{
-	-- 			"<leader>pl",
-	-- 			function()
-	-- 				require("debugprint").debugprint({ above = true, variable = true })
-	-- 			end,
-	-- 			desc = "Print in console",
-	-- 		},
-	-- 	},
-	-- 	config = function()
-	-- 		require("debugprint").setup()
-	-- 	end,
-	-- },
+
+	{
+		"CRAG666/code_runner.nvim",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		event = "VeryLazy",
+		keys = {
+			{
+				"<leader>rc",
+				"<cmd>:RunCode<CR>",
+				desc = "[R]un [C]ode",
+			},
+		},
+		config = function()
+			require("code_runner").setup({
+				mode = "float",
+				filetype = {
+					javascript = "node",
+					python = "python3 -u",
+					-- typescript = "deno run",
+				},
+			})
+		end,
+	},
+
+	{
+		"narutoxy/dim.lua",
+		event = "VeryLazy",
+		dependencies = { "nvim-treesitter/nvim-treesitter", "neovim/nvim-lspconfig" },
+		config = function()
+			require("dim").setup({})
+		end,
+	},
 }

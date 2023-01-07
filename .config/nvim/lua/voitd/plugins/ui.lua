@@ -1,26 +1,26 @@
 return {
 	-- better vim.notify
-	{
-		"rcarriga/nvim-notify",
-		keys = {
-			{
-				"<leader>nc",
-				function()
-					require("notify").dismiss({ silent = true, pending = true })
-				end,
-				desc = "Clear all Notifications",
-			},
-		},
-		config = {
-			timeout = 3000,
-			max_height = function()
-				return math.floor(vim.o.lines * 0.75)
-			end,
-			max_width = function()
-				return math.floor(vim.o.columns * 0.75)
-			end,
-		},
-	},
+	-- {
+	-- 	"rcarriga/nvim-notify",
+	-- 	keys = {
+	-- 		{
+	-- 			"<leader>nc",
+	-- 			function()
+	-- 				require("notify").dismiss({ silent = true, pending = true })
+	-- 			end,
+	-- 			desc = "Clear all Notifications",
+	-- 		},
+	-- 	},
+	-- 	config = {
+	-- 		timeout = 3000,
+	-- 		max_height = function()
+	-- 			return math.floor(vim.o.lines * 0.75)
+	-- 		end,
+	-- 		max_width = function()
+	-- 			return math.floor(vim.o.columns * 0.75)
+	-- 		end,
+	-- 	},
+	-- },
 
 	-- better vim.ui
 	{
@@ -48,7 +48,7 @@ return {
 				diagnostics = "nvim_lsp",
 				always_show_bufferline = false,
 				diagnostics_indicator = function(_, _, diag)
-					local icons = require("lazyvim.config.icons").diagnostics
+					local icons = require("voitd.config.icons").diagnostics
 					local ret = (diag.error and icons.Error .. diag.error .. " " or "")
 						.. (diag.warning and icons.Warn .. diag.warning or "")
 					return vim.trim(ret)
@@ -65,20 +65,6 @@ return {
 		},
 	},
 
-	-- statusline
-	-- {
-	-- 	"nvim-lualine/lualine.nvim",
-	-- 	event = "VeryLazy",
-	-- 	config = {
-	-- 		options = {
-	-- 			globalstatus = true,
-	-- 			disabled_filetypes = { statusline = { "lazy", "alpha" } },
-	-- 			section_separators = "",
-	-- 			component_separators = "",
-	-- 		},
-	-- 	},
-	-- },
-	--
 	-- indent guides for Neovim
 	{
 		"lukas-reineke/indent-blankline.nvim",
@@ -100,12 +86,20 @@ return {
 				override = {
 					["vim.lsp.util.convert_input_to_markdown_lines"] = true,
 					["vim.lsp.util.stylize_markdown"] = true,
+					["cmp.entry.get_documentation"] = true,
 				},
 			},
 			presets = {
 				bottom_search = true,
 				command_palette = true,
 				long_message_to_split = true,
+			},
+			cmdline = {
+				view = "cmdline",
+			},
+			popupmenu = {
+				---@type 'nui'|'cmp'
+				backend = "cmp", -- backend to use to show regular cmdline completions
 			},
 		},
 	},
@@ -132,7 +126,8 @@ return {
 				dashboard.button("n", " " .. " New file", ":ene <BAR> startinsert <CR>"),
 				dashboard.button("r", " " .. " Recent files", ":Telescope oldfiles <CR>"),
 				dashboard.button("g", " " .. " Find text", ":Telescope live_grep <CR>"),
-				dashboard.button("c", " " .. " Config", ":e $MYVIMRC <CR>"),
+				dashboard.button("c", " " .. " Config", ":e ~/.dots-nightly/.config/nvim/init.lua <CR>"),
+				-- dashboard.button("c", " " .. " Config", ":e $MYVIMRC <CR>"),
 				dashboard.button("l", "鈴" .. " Lazy", ":Lazy<CR>"),
 				dashboard.button("p", " " .. " Playgrounds", ":e ~/Playgrounds/playground.js <CR>"),
 				dashboard.button("q", " " .. " Quit", ":qa<CR>"),
@@ -157,7 +152,7 @@ return {
 			end
 
 			vim.api.nvim_create_autocmd("User", {
-				pattern = "LazyVimStarted",
+				pattern = "voitdStarted",
 				callback = function()
 					local stats = require("lazy").stats()
 					local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
@@ -167,61 +162,49 @@ return {
 			})
 		end,
 	},
+
 	-- auto-resize windows
 	{
-		enabled = true,
 		"anuvyklack/windows.nvim",
 		event = "WinNew",
 		dependencies = {
 			{ "anuvyklack/middleclass" },
 			{ "anuvyklack/animation.nvim", enabled = false },
 		},
-		keys = { { "<leader>Z", "<cmd>WindowsMaximize<cr>" } },
+		keys = { { "<leader>Z", "<cmd>WindowsMaximize<cr>", desc = "Zoom Window" } },
 		config = function()
 			vim.o.winwidth = 5
 			vim.o.winminwidth = 5
 			vim.o.equalalways = false
 			require("windows").setup({
-				animation = { enable = false, duration = 150 },
+				animation = { enable = true, duration = 150 },
 			})
 		end,
 	},
-	{
-		"echasnovski/mini.animate",
-		event = "VeryLazy",
-		config = function()
-			local mouse_scrolled = false
-			for _, scroll in ipairs({ "Up", "Down" }) do
-				local key = "<ScrollWheel" .. scroll .. ">"
-				vim.keymap.set("", key, function()
-					mouse_scrolled = true
-					return key
-				end, { expr = true })
-			end
 
-			local animate = require("mini.animate")
-			vim.go.winwidth = 20
-			vim.go.winminwidth = 5
+	-- floating winbar
+	-- {
+	-- 	"b0o/incline.nvim",
+	-- 	event = "BufReadPre",
+	-- 	config = function()
+	-- 		local colors = require("tokyonight.colors").setup()
+	-- 		require("incline").setup({
+	-- 			highlight = {
+	-- 				groups = {
+	-- 					InclineNormal = { guibg = "#FC56B1", guifg = colors.black },
+	-- 					InclineNormalNC = { guifg = "#FC56B1", guibg = colors.black },
+	-- 				},
+	-- 			},
+	-- 			window = { margin = { vertical = 0, horizontal = 1 } },
+	-- 			render = function(props)
+	-- 				local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ":t")
+	-- 				local icon, color = require("nvim-web-devicons").get_icon_color(filename)
+	-- 				return { { icon, guifg = color }, { " " }, { filename } }
+	-- 			end,
+	-- 		})
+	-- 	end,
+	-- },
 
-			animate.setup({
-				resize = {
-					timing = animate.gen_timing.linear({ duration = 100, unit = "total" }),
-				},
-				scroll = {
-					timing = animate.gen_timing.linear({ duration = 150, unit = "total" }),
-					subscroll = animate.gen_subscroll.equal({
-						predicate = function(total_scroll)
-							if mouse_scrolled then
-								mouse_scrolled = false
-								return false
-							end
-							return total_scroll > 1
-						end,
-					}),
-				},
-			})
-		end,
-	},
 	-- colorizer
 	{
 		"NvChad/nvim-colorizer.lua",
@@ -245,5 +228,27 @@ return {
 				virtualtext = "■",
 			},
 		},
+	},
+	{
+		"Wansmer/treesj",
+		keys = {
+			{ "J", "<cmd>TSJToggle<cr>" },
+		},
+		config = { use_default_keymaps = false, max_join_length = 150 },
+	},
+
+	{ "folke/twilight.nvim", event = "VeryLazy" },
+	{
+		"folke/zen-mode.nvim",
+		event = "VeryLazy",
+		cmd = "ZenMode",
+		config = {
+			plugins = {
+				gitsigns = true,
+				tmux = true,
+				kitty = { enabled = false, font = "+2" },
+			},
+		},
+		keys = { { "<leader>tz", "<cmd>ZenMode<cr>", desc = "Zen Mode" } },
 	},
 }

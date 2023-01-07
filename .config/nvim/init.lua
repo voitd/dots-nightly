@@ -1,4 +1,4 @@
-require("lazyvim.config.options")
-require("lazyvim.config.lazy")
-require("lazyvim.config.autocmds")
-require("lazyvim.config.keymaps")
+require("voitd.config.options")
+require("voitd.config.lazy")
+require("voitd.config.autocmds")
+require("voitd.config.keymaps")

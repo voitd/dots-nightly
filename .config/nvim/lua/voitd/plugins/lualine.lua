@@ -7,23 +7,7 @@ local function clock()
 	return " " .. os.date("%H:%M")
 end
 
-local colors = {
-	bg = "blend",
-	fg = "#bbc2cf",
-	yellow = "#ECBE7B",
-	cyan = "#008080",
-	darkblue = "#081633",
-	green = "#98be65",
-	orange = "#FF8800",
-	violet = "#a9a1e1",
-	magenta = "#c678dd",
-	blue = "#51afef",
-	red = "#ec5f67",
-}
-
-local function clock()
-	return " " .. os.date("%H:%M")
-end
+local colors = require("tokyonight.colors").setup()
 
 function M.config()
 	if vim.g.started_by_firenvim then
@@ -39,8 +23,8 @@ function M.config()
 				-- We are going to use lualine_c an lualine_x as left and
 				-- right section. Both are highlighted by c theme .  So we
 				-- are just setting default looks o statusline
-				normal = { c = { fg = colors.fg, bg = colors.bg } },
-				inactive = { c = { fg = colors.fg, bg = colors.bg } },
+				normal = { c = { fg = colors.fg, bg = "blend" } },
+				inactive = { c = { fg = colors.fg, bg = "blend" } },
 			},
 			icons_enabled = true,
 			globalstatus = true,
@@ -86,14 +70,14 @@ function M.config()
 							v = colors.blue,
 							[""] = colors.blue,
 							V = colors.blue,
-							c = colors.magenta,
+							c = colors.yellow,
 							no = colors.red,
 							s = colors.orange,
 							S = colors.orange,
 							[""] = colors.orange,
 							ic = colors.yellow,
-							R = colors.violet,
-							Rv = colors.violet,
+							R = colors.magenta,
+							Rv = colors.magenta2,
 							cv = colors.red,
 							ce = colors.red,
 							r = colors.cyan,

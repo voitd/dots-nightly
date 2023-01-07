@@ -14,13 +14,13 @@ return {
 		servers = nil,
 		config = function(plugin)
 			-- setup formatting and keymaps
-			require("lazyvim.util").on_attach(function(client, buffer)
-				require("lazyvim.plugins.lsp.format").on_attach(client, buffer)
-				require("lazyvim.plugins.lsp.keymaps").on_attach(client, buffer)
+			require("voitd.util").on_attach(function(client, buffer)
+				require("voitd.plugins.lsp.format").on_attach(client, buffer)
+				require("voitd.plugins.lsp.keymaps").on_attach(client, buffer)
 			end)
 
 			-- diagnostics
-			for name, icon in pairs(require("lazyvim.config.icons").diagnostics) do
+			for name, icon in pairs(require("voitd.config.icons").diagnostics) do
 				name = "DiagnosticSign" .. name
 				vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
 			end
@@ -36,7 +36,7 @@ return {
 				require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 			---@type lspconfig.options
-			local servers = plugin.servers or require("lazyvim.plugins.lsp.servers")
+			local servers = plugin.servers or require("voitd.plugins.lsp.servers")
 			for server, opts in pairs(servers) do
 				opts.capabilities = capabilities
 				require("lspconfig")[server].setup(opts)
