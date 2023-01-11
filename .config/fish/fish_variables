@@ -13,6 +13,8 @@ SETUVAR Z_DATA_DIR:/Users/voitd/\x2elocal/share/z
 SETUVAR Z_EXCLUDE:\x5e/Users/voitd\x24
 SETUVAR __fish_initialized:3400
 SETUVAR _fish_abbr_gist:pbpaste\x20\x7c\x20gh\x20gist\x20create\x20\x7c\x20rg\x20github\x20\x7c\x20pbcopy
+SETUVAR _fish_abbr_speed:curl\x20\x2ds\x20https\x3a//raw\x2egithubusercontent\x2ecom/sivel/speedtest\x2dcli/master/speedtest\x2epy\x20\x7c\x20python3\x20\x2d
+SETUVAR _fish_abbr_watts:/usr/sbin/ioreg\x20\x2drw0\x20\x2dc\x20AppleSmartBattery\x20\x7c\x20grep\x20BatteryData\x20\x7c\x20grep\x20\x2do\x20\x27AdapterPower\x3d\x5b0\x2d9\x5d\x2a\x27\x20\x7c\x20cut\x20\x2dc\x2016\x2d\x20\x7c\x20xargs\x20\x2dI\x20\x25\x20\x20lldb\x20\x2d\x2dbatch\x20\x2do\x20print/f\x20\x25\x20\x7c\x20grep\x20\x2do\x20\x27\x20\x3d\x20\x5b0\x2d9\x2e\x5d\x2a\x27\x20\x7c\x20cut\x20\x2dc\x206\x2d
 SETUVAR _fisher_jethrokuan_2F_z_files:\x7e/\x2econfig/fish/functions/__z\x2efish\x1e\x7e/\x2econfig/fish/functions/__z_add\x2efish\x1e\x7e/\x2econfig/fish/functions/__z_clean\x2efish\x1e\x7e/\x2econfig/fish/functions/__z_complete\x2efish\x1e\x7e/\x2econfig/fish/conf\x2ed/z\x2efish
 SETUVAR _fisher_jorgebucaran_2F_fisher_files:\x7e/\x2econfig/fish/functions/fisher\x2efish\x1e\x7e/\x2econfig/fish/completions/fisher\x2efish
 SETUVAR _fisher_jorgebucaran_2F_hydro_files:\x7e/\x2econfig/fish/functions/fish_mode_prompt\x2efish\x1e\x7e/\x2econfig/fish/functions/fish_prompt\x2efish\x1e\x7e/\x2econfig/fish/conf\x2ed/hydro\x2efish
