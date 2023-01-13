@@ -37,16 +37,10 @@ return {
 		config = function()
 			local cmp = require("cmp")
 			local snip = require("luasnip")
-			-- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-			cmp.setup.cmdline({ "/", "?" }, {
-				mapping = cmp.mapping.preset.cmdline(),
-				sources = {
-					{ name = "buffer" },
-				},
-			})
 			cmp.setup({
 				completion = {
 					completeopt = "menu,menuone,noinsert",
+					col_offset = -3, -- align the abbr and word on cursor (due to fields order below)
 				},
 				snippet = {
 					expand = function(args)
@@ -67,9 +61,30 @@ return {
 					{ name = "path" },
 				}),
 				formatting = {
-					format = function(_, item)
+					format = function(entry, item)
 						local icons = require("voitd.config.icons").kinds
+						local blackOrWhiteFg = function(r, g, b)
+							return ((r * 0.299 + g * 0.587 + b * 0.114) > 186) and "#000000" or "#ffffff"
+						end
 						if icons[item.kind] then
+							if item.kind == "Color" and entry.completion_item.documentation then
+								local _, _, r, g, b =
+									string.find(entry.completion_item.documentation, "^rgb%((%d+), (%d+), (%d+)")
+								if r then
+									local color = string.format("%02x", r)
+										.. string.format("%02x", g)
+										.. string.format("%02x", b)
+									local group = "Tw_" .. color
+									if vim.fn.hlID(group) < 1 then
+										vim.api.nvim_set_hl(
+											0,
+											group,
+											{ fg = blackOrWhiteFg(r, g, b), bg = "#" .. color }
+										)
+									end
+									item.kind_hl_group = group
+								end
+							end
 							item.kind = icons[item.kind] .. item.kind
 						end
 						return item

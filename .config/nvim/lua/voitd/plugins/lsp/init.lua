@@ -74,6 +74,12 @@ return {
 			"shfmt",
 			"prettierd",
 			"eslint_d",
+			"emmet-ls",
+			"css-ls",
+			"html-ls",
+			"tailwindcss-language-server",
+			"typescript-language-server",
+			"vue-language-server",
 		},
 		config = function(plugin)
 			require("mason").setup()

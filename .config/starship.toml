@@ -1,6 +1,5 @@
-format = """[](bold green)$time$battery$cmd_duration$status$memory_usage
-[](bold green)
-[┌─](bold #aef58d)$username$hostname$shell$shlvl$jobs
+format = """[](bold green)
+[┌─](bold #aef58d)$username$hostname$shlvl$jobs$time$battery$cmd_duration$status$memory_usage
 [│](bold #aef58d) $directory$golang\
 $git_branch\
 $git_commit\
@@ -23,7 +22,7 @@ symbol = " "
 [memory_usage]
 disabled = false
 threshold = -1
-format= "[  ${ram}( ${swap}) ]($style)"
+format= "[  ${ram}(  ${swap}) ]($style)"
 style = "bold #ffffff "
 
 [status]
@@ -49,7 +48,7 @@ use_logical_path=true
 
 [hostname]
 ssh_only = false
-format = "[@$hostname ](#f3175f)"
+format = "[@$hostname ](#ff9e64)"
 trim_at = ".companyname.com"
 disabled = false
 

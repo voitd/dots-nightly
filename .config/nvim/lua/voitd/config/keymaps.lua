@@ -1,3 +1,5 @@
+local U = require("voitd.util")
+
 vim.keymap.set("n", "Q", "<Nop>", { noremap = true })
 vim.keymap.set("n", "q:", "<Nop>", { noremap = true })
 
@@ -7,8 +9,9 @@ vim.keymap.set("n", "0", "^")
 vim.keymap.set("v", "$", "g_")
 vim.keymap.set("n", "$", "g_")
 
-vim.keymap.set("v", "<leader>rw", ":%s/\\<<C-r><C-w>\\>//g<Left><Left>", { desc = "Replace visual" })
-vim.keymap.set("n", "<leader>r", ":%s///gcI<Left><Left><Left><Left>", { desc = "Replace" })
+vim.keymap.set("n", "<leader>rw", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Replace visual" })
+-- vim.keymap.set("v", "<leader>rw", ":%s/\\<<C-r><C-w>\\>//g<Left><Left>", { desc = "Replace visual" })
+-- vim.keymap.set("n", "<leader>r", ":%s///gcI<Left><Left><Left><Left>", { desc = "Replace" })
 
 -- vim.keymap.set("n", "<BS>", "<C-^>")
 
@@ -32,7 +35,10 @@ vim.keymap.set("n", "gv", "<C-W>v<C-]>")
 vim.keymap.set("o", "A", ":<C-U>normal! ggVG<CR>")
 -- map c and d to black hole registers
 -- vim.keymap.set("n", "d", '"_d', {})
-vim.keymap.set("n", "c", '"_c', {})
+vim.keymap.set("n", "c", '"_c', {}) -- greatest remap ever
+
+-- This is going to get me cancelled
+vim.keymap.set("i", "<C-c>", "<Esc>")
 
 vim.cmd([[xnoremap <expr> p 'pgv"' . v:register . 'y`]']])
 
@@ -41,14 +47,17 @@ vim.keymap.set("n", "<C-s>", ":noa w<CR>")
 
 vim.keymap.set("n", "a", "empty(getline('.')) ? 'S' : 'a'", { expr = true })
 
-vim.keymap.set("n", "<leader>o", ':<C-u>call append(line("."), repeat([""], v:count1))<CR>')
-vim.keymap.set("n", "<leader>O", ':<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>')
-
 vim.keymap.set(
 	"n",
-	"<C-q><C-g>",
-	[[:lua vim.fn.system({'open', 'https://google.com/search?q=' .. vim.fn.expand("<cword>")})<CR>]],
-	{ desc = "Search word in google" }
+	"<leader>o",
+	':<C-u>call append(line("."), repeat([""], v:count1))<CR>',
+	{ desc = "Insert before line" }
+)
+vim.keymap.set(
+	"n",
+	"<leader>O",
+	':<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>',
+	{ desc = "Isert after line" }
 )
 
 -- Important: Revert back to previous cursor position
@@ -58,21 +67,26 @@ vim.keymap.set("n", "<A-u>", "gUiww", { desc = "Capitalize under cursor" })
 vim.keymap.set("n", "<A-l>", "gUiww", { desc = "Lowercase under cursor" })
 
 -- Keymaps for Nvim tree
-vim.keymap.set("n", "<leader>e", ":Neotree<cr>")
 vim.keymap.set("n", "<C-Left>", "<C-w><Left>")
 vim.keymap.set("n", "<C-Right>", "<C-w><Right>")
 
 -- Move to window using the <meta> movement keys
-vim.keymap.set("n", "<A-left>", "<C-w>h")
-vim.keymap.set("n", "<A-down>", "<C-w>j")
-vim.keymap.set("n", "<A-up>", "<C-w>k")
-vim.keymap.set("n", "<A-right>", "<C-w>l")
+vim.keymap.set("n", "<A-left>", "<C-w>h", { desc = "Go to left window" })
+vim.keymap.set("n", "<A-down>", "<C-w>j", { desc = "Go to lower window" })
+vim.keymap.set("n", "<A-up>", "<C-w>k", { desc = "Go to upper window" })
+vim.keymap.set("n", "<A-right>", "<C-w>l", { desc = "Go to right window" })
 
 -- Resize window using <shift> arrow keys
-vim.keymap.set("n", "<S-Up>", "<cmd>resize +2<CR>")
-vim.keymap.set("n", "<S-Down>", "<cmd>resize -2<CR>")
-vim.keymap.set("n", "<S-Left>", "<cmd>vertical resize -2<CR>")
-vim.keymap.set("n", "<S-Right>", "<cmd>vertical resize +2<CR>")
+vim.keymap.set("n", "<S-Up>", "<cmd>resize +2<CR>", { desc = "Increase window height" })
+vim.keymap.set("n", "<S-Down>", "<cmd>resize -2<CR>", { desc = "Decrease window height" })
+vim.keymap.set("n", "<S-Left>", "<cmd>vertical resize -2<CR>", { desc = "Decrease window width" })
+vim.keymap.set("n", "<S-Right>", "<cmd>vertical resize +2<CR>", { desc = "Increase window width" })
+--
+-- buffers
+vim.keymap.set("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
+vim.keymap.set("n", "]b", "<cmd>bnext<cr>", { desc = "Next buffer" })
+vim.keymap.set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
+vim.keymap.set("n", "<leader>`", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 
 -- Move Lines
 -- vim.keymap.set("n", "<A-j>", ":m .+1<CR>==")
@@ -91,7 +105,7 @@ vim.keymap.set("n", "[p", ":pu!<cr>")
 vim.keymap.set("n", "]p", ":pu<cr>")
 
 -- Clear search with <esc>
-vim.keymap.set({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>")
+vim.keymap.set({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
 vim.keymap.set("n", "gw", "*N")
 vim.keymap.set("x", "gw", "*N")
 
@@ -129,3 +143,32 @@ vim.keymap.set("n", "<leader>wh", "<C-w>s", { desc = "Split horizontally" }) -- 
 vim.keymap.set("n", "<leader>we", "<C-w>=", { desc = "Centered split" }) -- make split windows equal width & height
 vim.keymap.set("n", "<leader>wx", ":close<CR>", { desc = "Close split" }) -- close current split window
 vim.keymap.set("n", "<leader>bp", ":BufferLinePick<CR>", { desc = "Pick buffer" }) -- close current split window
+
+-- toggle options
+vim.keymap.set("n", "<leader>tf", require("voitd.plugins.lsp.format").toggle, { desc = "Toggle format on Save" })
+vim.keymap.set("n", "<leader>ts", function()
+	U.toggle("spell")
+end, { desc = "Toggle Spelling" })
+vim.keymap.set("n", "<leader>tw", function()
+	U.toggle("wrap")
+end, { desc = "Toggle Word Wrap" })
+vim.keymap.set("n", "<leader>tn", function()
+	U.toggle("relativenumber", true)
+	U.toggle("number")
+end, { desc = "Toggle Line Numbers" })
+vim.keymap.set("n", "<leader>tD", U.toggle_diagnostics, { desc = "Toggle Diagnostics" })
+local conceallevel = vim.o.conceallevel > 0 and vim.o.conceallevel or 3
+vim.keymap.set("n", "<leader>tc", function()
+	U.toggle("conceallevel", false, { 0, conceallevel })
+end, { desc = "Toggle Conceal" })
+
+-- floating terminal
+-- vim.keymap.set("n", "<leader>ft", function()
+-- 	U.float_term(nil, { cwd = U.get_root() })
+-- end, { desc = "Terminal (root dir)" })
+--
+-- vim.keymap.set("n", "<leader>fT", function()
+-- 	U.float_term()
+-- end, { desc = "Terminal (cwd)" })
+--
+-- vim.keymap.set("t", "<esc><esc>", "<c-\\><c-n>", { desc = "Enter Normal Mode" })

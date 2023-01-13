@@ -1,3 +1,4 @@
+local icons = require("voitd.config.icons")
 local M = {
 	"nvim-lualine/lualine.nvim",
 	event = "VeryLazy",
@@ -97,7 +98,16 @@ function M.config()
 					color = { fg = colors.blue, gui = "bold" },
 					symbols = { modified = " ", readonly = " ", unnamed = "" },
 				},
-				{ "diagnostics", sources = { "nvim_diagnostic" } },
+				{
+					"diagnostics",
+					sources = { "nvim_diagnostic" },
+					symbols = {
+						error = icons.diagnostics.Error,
+						warn = icons.diagnostics.Warn,
+						info = icons.diagnostics.Info,
+						hint = icons.diagnostics.Hint,
+					},
+				},
 				{
 					function()
 						local navic = require("nvim-navic")
@@ -125,60 +135,60 @@ function M.config()
 					-- 	removed = { fg = "#D73A49" },
 					-- },
 					symbols = {
-						added = " ",
-						modified = " ",
-						removed = " ",
+						added = icons.git.added,
+						modified = icons.git.modified,
+						removed = icons.git.removed,
 					},
 				},
 				-- {
 				--   require("noice").api.status.message.get_hl,
 				--   cond = require("noice").api.status.message.has,
 				-- },
-				{
-					function()
-						return require("noice").api.status.mode.get()
-					end,
-					cond = function()
-						if package.loaded["noice"] then
-							return require("noice").api.status.mode.has()
-						end
-					end,
-					-- color = { fg = "#ff9e64" },
-				},
-				{
-					function()
-						return require("noice").api.status.search.get()
-					end,
-					cond = function()
-						if package.loaded["noice"] then
-							return require("noice").api.status.search.has()
-						end
-					end,
-					-- color = { fg = "#ff9e64" },
-				},
-				{
-					function()
-						return require("lazy.status").updates()
-					end,
-					cond = require("lazy.status").has_updates,
-					-- color = { fg = "#ff9e64" },
-				},
-				{
-					function()
-						local stats = require("lazy").stats()
-						local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
-						return " " .. ms .. "ms"
-					end,
-					-- color = { fg = "#ff9e64" },
-				},
-				-- function()
-				--   return require("messages.view").status
-				-- end,
-				{
-					function()
-						return require("util.dashboard").status()
-					end,
-				},
+				-- {
+				-- 	function()
+				-- 		return require("noice").api.status.mode.get()
+				-- 	end,
+				-- 	cond = function()
+				-- 		if package.loaded["noice"] then
+				-- 			return require("noice").api.status.mode.has()
+				-- 		end
+				-- 	end,
+				-- 	-- color = { fg = "#ff9e64" },
+				-- },
+				-- {
+				-- 	function()
+				-- 		return require("noice").api.status.search.get()
+				-- 	end,
+				-- 	cond = function()
+				-- 		if package.loaded["noice"] then
+				-- 			return require("noice").api.status.search.has()
+				-- 		end
+				-- 	end,
+				-- 	-- color = { fg = "#ff9e64" },
+				-- },
+				-- {
+				-- 	function()
+				-- 		return require("lazy.status").updates()
+				-- 	end,
+				-- 	cond = require("lazy.status").has_updates,
+				-- 	-- color = { fg = "#ff9e64" },
+				-- },
+				-- {
+				-- 	function()
+				-- 		local stats = require("lazy").stats()
+				-- 		local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+				-- 		return " " .. ms .. "ms"
+				-- 	end,
+				-- 	-- color = { fg = "#ff9e64" },
+				-- },
+				-- -- function()
+				-- --   return require("messages.view").status
+				-- -- end,
+				-- {
+				-- 	function()
+				-- 		return require("util.dashboard").status()
+				-- 	end,
+				-- },
 				{
 					function()
 						return require("noice").api.status.command.get()

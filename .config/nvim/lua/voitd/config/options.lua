@@ -1,6 +1,14 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+vim.opt.termguicolors = true
+vim.cmd([[highlight IndentBlanklineIndent1 guifg=#E06C75 gui=nocombine]])
+vim.cmd([[highlight IndentBlanklineIndent2 guifg=#E5C07B gui=nocombine]])
+vim.cmd([[highlight IndentBlanklineIndent3 guifg=#98C379 gui=nocombine]])
+vim.cmd([[highlight IndentBlanklineIndent4 guifg=#56B6C2 gui=nocombine]])
+vim.cmd([[highlight IndentBlanklineIndent5 guifg=#61AFEF gui=nocombine]])
+vim.cmd([[highlight IndentBlanklineIndent6 guifg=#C678DD gui=nocombine]])
+
 vim.opt.autowrite = true -- enable auto write
 vim.opt.clipboard = "unnamedplus" -- sync with system clipboard
 vim.opt.cmdheight = 1
@@ -49,7 +57,7 @@ vim.opt.iskeyword:append("-") -- consider string-string as whole word
 
 if vim.fn.has("nvim-0.9.0") == 1 then
 	vim.opt.splitkeep = "screen"
-	vim.o.shortmess = "filnxtToOFWIcC"
+	vim.opt.shortmess = "filnxtToOFWIcC"
 end
 
 -- fix markdown indentation settings

@@ -52,7 +52,34 @@ return {
 			desc = "Goto Symbol",
 		},
 	},
-	config = true,
+	opts = {
+		defaults = {
+			prompt_prefix = " ",
+			selection_caret = " ",
+			layout_strategy = "vertical",
+			layout_config = { prompt_position = "top", width = 0.5 },
+			sorting_strategy = "ascending",
+			mappings = {
+				i = {
+					["<c-t>"] = function(...)
+						return require("trouble.providers.telescope").open_with_trouble(...)
+					end,
+					["<C-i>"] = function()
+						util.telescope("find_files", { no_ignore = true })()
+					end,
+					["<C-h>"] = function()
+						util.telescope("find_files", { hidden = true })()
+					end,
+					["<C-Down>"] = function(...)
+						return require("telescope.actions").cycle_history_next(...)
+					end,
+					["<C-Up>"] = function(...)
+						return require("telescope.actions").cycle_history_prev(...)
+					end,
+				},
+			},
+		},
+	},
 	-- config = function(plugin)
 	-- 	local telescope = require("telescope")
 	-- 	telescope.setup(vim.tbl_deep_extend("force", plugin._.super.config, {

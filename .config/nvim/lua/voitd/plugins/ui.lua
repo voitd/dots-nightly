@@ -74,6 +74,15 @@ return {
 			filetype_exclude = { "help", "alpha", "dashboard", "neo-tree", "Trouble", "lazy" },
 			show_trailing_blankline_indent = false,
 			show_current_context = true,
+			show_current_context_start = true,
+			-- char_highlight_list = {
+			-- 	"IndentBlanklineIndent1",
+			-- 	"IndentBlanklineIndent2",
+			-- 	"IndentBlanklineIndent3",
+			-- 	"IndentBlanklineIndent4",
+			-- 	"IndentBlanklineIndent5",
+			-- 	"IndentBlanklineIndent6",
+			-- },
 		},
 	},
 
@@ -212,18 +221,16 @@ return {
 			filetypes = { "*", "!lazy" },
 			buftype = { "*", "!prompt", "!nofile" },
 			user_default_options = {
-				RGB = true, -- #RGB hex codes
-				RRGGBB = true, -- #RRGGBB hex codes
-				names = false, -- "Name" codes like Blue
+				names = true, -- "Name" codes like Blue
 				RRGGBBAA = true, -- #RRGGBBAA hex codes
-				AARRGGBB = false, -- 0xAARRGGBB hex codes
-				rgb_fn = true, -- CSS rgb() and rgba() functions
-				hsl_fn = true, -- CSS hsl() and hsla() functions
-				css = false, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
+				css = true, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
 				css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn
 				-- Available modes: foreground, background
 				-- Available modes for `mode`: foreground, background,  virtualtext
 				mode = "background", -- Set the display mode.
+				tailwind = "both",
+				-- tailwind = "lsp",
+				sass = { enable = false, parsers = { css } },
 				virtualtext = "■",
 			},
 		},
@@ -236,17 +243,17 @@ return {
 		config = { use_default_keymaps = false, max_join_length = 150 },
 	},
 
-	{ "folke/twilight.nvim" },
-	{
-		"folke/zen-mode.nvim",
-		cmd = "ZenMode",
-		config = {
-			plugins = {
-				gitsigns = true,
-				tmux = true,
-				kitty = { enabled = false, font = "+2" },
-			},
-		},
-		keys = { { "<leader>tz", "<cmd>ZenMode<cr>", desc = "Zen Mode" } },
-	},
+	-- { "folke/twilight.nvim" },
+	-- {
+	-- 	"folke/zen-mode.nvim",
+	-- 	cmd = "ZenMode",
+	-- 	config = {
+	-- 		plugins = {
+	-- 			gitsigns = true,
+	-- 			tmux = true,
+	-- 			kitty = { enabled = false, font = "+2" },
+	-- 		},
+	-- 	},
+	-- 	keys = { { "<leader>tz", "<cmd>ZenMode<cr>", desc = "Zen Mode" } },
+	-- },
 }
