@@ -14,7 +14,7 @@ vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 require("lazy").setup({
 	spec = "voitd.plugins",
 	defaults = { lazy = true, version = "*" },
-	install = { colorscheme = { "tokyonight" } },
+	install = { colorscheme = { "tokyonight", "habamax" } },
 	checker = { enabled = true },
 	performance = {
 		rtp = {

@@ -1,6 +1,6 @@
 abbr -ag g "git"
 abbr -ag ga "git add"
-abbr -ag gaa "git add --agll"
+abbr -ag gaa "git add --all"
 abbr -ag gap "git apply"
 abbr -ag gapa "git add --patch"
 
@@ -62,7 +62,7 @@ abbr -ag glr "git pull --rebase"
 
 abbr -ag glg "git log --stat --max-count=10"
 abbr -ag glgg "git log --graph --max-count=10"
-abbr -ag glgga "git log --graph --decorate --agll"
+abbr -ag glgga "git log --graph --decorate --all"
 abbr -ag glo "git log --oneline --decorate --color"
 abbr -ag glog "git log --oneline --decorate --color --graph"
 abbr -ag gloo "git log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short"

@@ -32,13 +32,15 @@ return {
 			})
 
 			-- lspconfig
-			local capabilities =
-				require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
-
+			local capabilities = vim.lsp.protocol.make_client_capabilities()
+			capabilities.textDocument.foldingRange = {
+				dynamicRegistration = false,
+				lineFoldingOnly = true,
+			}
 			---@type lspconfig.options
 			local servers = plugin.servers or require("voitd.plugins.lsp.servers")
 			for server, opts in pairs(servers) do
-				opts.capabilities = capabilities
+				opts.capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 				require("lspconfig")[server].setup(opts)
 			end
 		end,
@@ -53,6 +55,7 @@ return {
 			local nls = require("null-ls")
 			nls.setup({
 				sources = {
+					nls.builtins.code_actions.gitsigns,
 					nls.builtins.formatting.eslint_d,
 					nls.builtins.formatting.prettierd,
 					nls.builtins.formatting.stylua,
@@ -75,8 +78,8 @@ return {
 			"prettierd",
 			"eslint_d",
 			"emmet-ls",
-			"css-ls",
-			"html-ls",
+			"css-lsp",
+			"html-lsp",
 			"tailwindcss-language-server",
 			"typescript-language-server",
 			"vue-language-server",

@@ -43,7 +43,7 @@ local servers = {
 		},
 	},
 	volar = {},
-	html = {},
+	htmlls = {},
 	tailwindcss = {},
 	jsonls = {
 		on_new_config = function(new_config)

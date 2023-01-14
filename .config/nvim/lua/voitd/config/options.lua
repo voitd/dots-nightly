@@ -55,6 +55,37 @@ vim.go.winminwidth = 5 -- minimum window width
 vim.opt.swapfile = false -- Disable swap
 vim.opt.iskeyword:append("-") -- consider string-string as whole word
 
+-- vim.opt.foldtext = "v:lua.folds_render()"
+vim.o.foldcolumn = "0"
+vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+vim.o.foldlevelstart = 99
+vim.o.foldenable = true
+vim.o.statuscolumn = "%= "
+	.. "%s" -- sign column FIXME: figure out how to put on the other side without having to do a lot of shifting
+	.. "%{%" -- evaluate this, and then evaluate what it returns
+	.. "&number ?"
+	.. "(v:relnum ?"
+	.. 'printf("%"..len(line("$")).."s", v:relnum)' -- when showing relative numbers, make sure to pad so things don't shift as you move the cursor
+	.. ":"
+	.. "v:lnum"
+	.. ")"
+	.. ":"
+	.. '""'
+	.. " " -- space between lines and fold
+	.. "%}"
+	.. "%= "
+	.. "%#FoldColumn#" -- highlight group for fold
+	.. "%{" -- expression for showing fold expand/colapse
+	.. "foldlevel(v:lnum) > foldlevel(v:lnum - 1)" -- any folds?
+	.. "? (foldclosed(v:lnum) == -1" -- currently open?
+	.. '? ""' -- point down
+	.. ':  ""' -- point to right
+	.. ")"
+	.. ': " "' -- blank for no fold, or inside fold
+	.. "}"
+	.. "%= " -- spacing between end of column and start of text
+vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
+
 if vim.fn.has("nvim-0.9.0") == 1 then
 	vim.opt.splitkeep = "screen"
 	vim.opt.shortmess = "filnxtToOFWIcC"

@@ -1,3 +1,4 @@
+local config = require("luasnip.config")
 return {
 	-- better vim.notify
 	-- {
@@ -70,11 +71,12 @@ return {
 		"lukas-reineke/indent-blankline.nvim",
 		event = "BufReadPre",
 		config = {
-			char = "▏",
+			-- char = "▏",
+			char = "│",
 			filetype_exclude = { "help", "alpha", "dashboard", "neo-tree", "Trouble", "lazy" },
 			show_trailing_blankline_indent = false,
 			show_current_context = true,
-			show_current_context_start = true,
+			-- show_current_context_start = true,
 			-- char_highlight_list = {
 			-- 	"IndentBlanklineIndent1",
 			-- 	"IndentBlanklineIndent2",
@@ -100,15 +102,20 @@ return {
 			},
 			presets = {
 				bottom_search = false,
-				command_palette = false,
+				command_palette = true,
 				long_message_to_split = false,
 			},
 			cmdline = {
+				enabled = true,
 				view = "cmdline",
 			},
 			popupmenu = {
 				---@type 'nui'|'cmp'
-				backend = "cmp", -- backend to use to show regular cmdline completions
+				backend = "nui", -- backend to use to show regular cmdline completions
+				kind_icons = {},
+			},
+			messages = {
+				enabled = true,
 			},
 		},
 	},
@@ -241,6 +248,33 @@ return {
 			{ "J", "<cmd>TSJToggle<cr>" },
 		},
 		config = { use_default_keymaps = false, max_join_length = 150 },
+	},
+	{
+		"kevinhwang91/nvim-ufo",
+		event = "BufReadPre",
+		-- event = "VeryLazy",
+		dependencies = { "kevinhwang91/promise-async" },
+		keys = {
+			{
+				"K",
+				function()
+					local current_window = 0
+					local current_line, _ = unpack(vim.api.nvim_win_get_cursor(current_window))
+
+					if require("ufo.utils").foldClosed(current_window, current_line) > 0 then
+						require("ufo").peekFoldedLinesUnderCursor()
+					else
+						vim.lsp.buf.hover()
+					end
+				end,
+				desc = "Zoom Window",
+			},
+		},
+		config = {
+			provider_selector = function()
+				return { "treesitter", "indent" }
+			end,
+		},
 	},
 
 	-- { "folke/twilight.nvim" },
