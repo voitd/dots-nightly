@@ -69,23 +69,50 @@ return {
 	-- indent guides for Neovim
 	{
 		"lukas-reineke/indent-blankline.nvim",
-		event = "BufReadPre",
-		config = {
-			-- char = "▏",
-			char = "│",
+		event = "VeryLazy",
+		-- event = "BufReadPre",
+		opts = {
+			symbol = "│",
+			options = { try_as_border = true },
 			filetype_exclude = { "help", "alpha", "dashboard", "neo-tree", "Trouble", "lazy" },
 			show_trailing_blankline_indent = false,
-			show_current_context = true,
-			-- show_current_context_start = true,
-			-- char_highlight_list = {
-			-- 	"IndentBlanklineIndent1",
-			-- 	"IndentBlanklineIndent2",
-			-- 	"IndentBlanklineIndent3",
-			-- 	"IndentBlanklineIndent4",
-			-- 	"IndentBlanklineIndent5",
-			-- 	"IndentBlanklineIndent6",
-			-- },
+			show_current_context = false,
 		},
+		keys = { { "<leader>ti", ":IndentBlanklineToggle<cr>", desc = "Toggle Indentline" } },
+		-- config = {
+		-- 	filetype_exclude = { "help", "alpha", "dashboard", "neo-tree", "Trouble", "lazy" },
+		-- 	show_trailing_blankline_indent = false,
+		-- 	show_current_context = true,
+		-- show_current_context_start = true,
+		-- char_highlight_list = {
+		-- 	"IndentBlanklineIndent1",
+		-- 	"IndentBlanklineIndent2",
+		-- 	"IndentBlanklineIndent3",
+		-- 	"IndentBlanklineIndent4",
+		-- 	"IndentBlanklineIndent5",
+		-- 	"IndentBlanklineIndent6",
+		-- },
+		-- },
+	},
+
+	-- active indent guide and indent text objects
+	{
+		"echasnovski/mini.indentscope",
+		version = false, -- wait till new 0.7.0 release to put it back on semver
+		event = "BufReadPre",
+		opts = {
+			symbol = "│",
+			options = { try_as_border = true },
+		},
+		config = function(_, opts)
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = { "help", "alpha", "dashboard", "neo-tree", "Trouble", "lazy", "mason" },
+				callback = function()
+					vim.b.miniindentscope_disable = true
+				end,
+			})
+			require("mini.indentscope").setup(opts)
+		end,
 	},
 
 	-- noicer ui
@@ -103,7 +130,7 @@ return {
 			presets = {
 				bottom_search = false,
 				command_palette = true,
-				long_message_to_split = false,
+				long_message_to_split = true,
 			},
 			cmdline = {
 				enabled = true,
@@ -115,12 +142,24 @@ return {
 				kind_icons = {},
 			},
 			messages = {
-				enabled = true,
+				enabled = false,
 			},
 		},
 	},
 
 	-- dashboard
+	-- {
+	-- 	"willothy/veil.nvim",
+	-- 	event = "VimEnter",
+	-- 	dependencies = {
+	-- 		-- All optional, only required for the default setup.
+	-- 		-- If you customize your config, these aren't necessary.
+	-- 		"nvim-telescope/telescope.nvim",
+	-- 		"nvim-lua/plenary.nvim",
+	-- 		"nvim-telescope/telescope-file-browser.nvim",
+	-- 	},
+	-- 	config = true,
+	-- },
 	{
 		"goolord/alpha-nvim",
 		event = "VimEnter",
@@ -128,17 +167,17 @@ return {
 			local dashboard = require("alpha.themes.dashboard")
 			local logo = [[
 
-          ███╗   ██╗██╗   ██╗██╗███╗   ███╗         Z
-          ████╗  ██║██║   ██║██║████╗ ████║      Z
-          ██╔██╗ ██║██║   ██║██║██╔████╔██║   z
-          ██║╚██╗██║╚██╗ ██╔╝██║██║╚██╔╝██║ z
-          ██║ ╚████║ ╚████╔╝ ██║██║ ╚═╝ ██║
-          ╚═╝  ╚═══╝  ╚═══╝  ╚═╝╚═╝     ╚═╝
-      ]]
+	         ███╗   ██╗██╗   ██╗██╗███╗   ███╗         Z
+	         ████╗  ██║██║   ██║██║████╗ ████║      Z
+	         ██╔██╗ ██║██║   ██║██║██╔████╔██║   z
+	         ██║╚██╗██║╚██╗ ██╔╝██║██║╚██╔╝██║ z
+	         ██║ ╚████║ ╚████╔╝ ██║██║ ╚═╝ ██║
+	         ╚═╝  ╚═══╝  ╚═══╝  ╚═╝╚═╝     ╚═╝
+	     ]]
 
 			dashboard.section.header.val = vim.split(logo, "\n")
 			dashboard.section.buttons.val = {
-				dashboard.button("f", " " .. " Find file", ":Telescope find_files <CR>"),
+				dashboard.button("f", " " .. " Find file", ":Telescope find_files "),
 				dashboard.button("n", " " .. " New file", ":ene <BAR> startinsert <CR>"),
 				dashboard.button("r", " " .. " Recent files", ":Telescope oldfiles <CR>"),
 				dashboard.button("g", " " .. " Find text", ":Telescope live_grep <CR>"),
@@ -185,14 +224,16 @@ return {
 		event = "WinNew",
 		dependencies = {
 			{ "anuvyklack/middleclass" },
-			{ "anuvyklack/animation.nvim", enabled = false },
+			{ "anuvyklack/animation.nvim" },
+			-- { "anuvyklack/animation.nvim", enabled = false },
 		},
 		keys = { { "<leader>Z", "<cmd>WindowsMaximize<cr>", desc = "Zoom Window" } },
 		config = function()
-			vim.o.winwidth = 5
+			vim.o.winwidth = 10
+			vim.o.winminwidth = 10
 			vim.o.equalalways = false
 			require("windows").setup({
-				animation = { enable = false, duration = 150 },
+				animation = { enable = true, duration = 150 },
 			})
 		end,
 	},
@@ -220,6 +261,13 @@ return {
 	-- 	end,
 	-- },
 
+	-- better diffing
+	{
+		"sindrets/diffview.nvim",
+		cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewToggleFiles", "DiffviewFocusFiles" },
+		config = true,
+		keys = { { "<leader>tD", "<cmd>DiffviewOpen<cr>", desc = "DiffView" } },
+	},
 	-- colorizer
 	{
 		"NvChad/nvim-colorizer.lua",
@@ -243,39 +291,58 @@ return {
 		},
 	},
 	{
-		"Wansmer/treesj",
+		"AndrewRadev/splitjoin.vim",
+		event = "VeryLazy",
 		keys = {
-			{ "J", "<cmd>TSJToggle<cr>" },
+			{ "gj", "<cmd>SplitjoinSplit<cr>", desc = { "Split to multiline" } },
+			{ "gJ", "<cmd>SplitjoinJoin<cr>", desc = { "Join to one-line" } },
 		},
-		config = { use_default_keymaps = false, max_join_length = 150 },
 	},
-	{
-		"kevinhwang91/nvim-ufo",
-		event = "BufReadPre",
-		-- event = "VeryLazy",
-		dependencies = { "kevinhwang91/promise-async" },
-		keys = {
-			{
-				"K",
-				function()
-					local current_window = 0
-					local current_line, _ = unpack(vim.api.nvim_win_get_cursor(current_window))
+	-- {
+	-- 	"Wansmer/treesj",
+	-- 	keys = {
+	-- 		{ "J", "<cmd>TSJToggle<cr>" },
+	-- 	},
+	-- 	config = { use_default_keymaps = false, max_join_length = 150 },
+	-- },
 
-					if require("ufo.utils").foldClosed(current_window, current_line) > 0 then
-						require("ufo").peekFoldedLinesUnderCursor()
-					else
-						vim.lsp.buf.hover()
-					end
-				end,
-				desc = "Zoom Window",
-			},
-		},
-		config = {
-			provider_selector = function()
-				return { "treesitter", "indent" }
-			end,
-		},
-	},
+	-- {
+	-- 	"kevinhwang91/nvim-ufo",
+	-- 	event = "BufReadPre",
+	-- 	-- event = "VeryLazy",
+	-- 	dependencies = { "kevinhwang91/promise-async" },
+	-- 	keys = {
+	-- 		{
+	-- 			"K",
+	-- 			function()
+	-- 				local current_window = 0
+	-- 				local current_line, _ = unpack(vim.api.nvim_win_get_cursor(current_window))
+	--
+	-- 				if require("ufo.utils").foldClosed(current_window, current_line) > 0 then
+	-- 					require("ufo").peekFoldedLinesUnderCursor()
+	-- 				else
+	-- 					vim.lsp.buf.hover()
+	-- 				end
+	-- 			end,
+	-- 			desc = "Zoom Window",
+	-- 		},
+	-- 	},
+	-- 	config = {
+	-- 		provider_selector = function()
+	-- 			return { "treesitter", "indent" }
+	-- 		end,
+	-- 	},
+	-- },
+
+	-- dim the unused variables and functions
+	-- {
+	-- 	"0oAstro/dim.lua",
+	-- 	dependencies = { "nvim-treesitter/nvim-treesitter", "neovim/nvim-lspconfig" },
+	-- 	event = "BufReadPre",
+	-- 	config = function()
+	-- 		require("dim").setup({})
+	-- 	end,
+	-- },
 
 	-- { "folke/twilight.nvim" },
 	-- {

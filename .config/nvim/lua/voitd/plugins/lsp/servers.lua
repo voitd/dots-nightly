@@ -20,11 +20,11 @@ local servers = {
 		settings = {
 			typescript = {
 				inlayHints = {
-					includeInlayParameterNameHints = "all",
+					includeInlayParameterNameHints = "literal",
 					includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-					includeInlayFunctionParameterTypeHints = true,
-					includeInlayVariableTypeHints = true,
-					includeInlayPropertyDeclarationTypeHints = true,
+					includeInlayFunctionParameterTypeHints = false,
+					includeInlayVariableTypeHints = false,
+					includeInlayPropertyDeclarationTypeHints = false,
 					includeInlayFunctionLikeReturnTypeHints = true,
 					includeInlayEnumMemberValueHints = true,
 				},

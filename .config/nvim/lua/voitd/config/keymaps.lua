@@ -15,26 +15,25 @@ vim.keymap.set("n", "<leader>rw", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left>
 
 -- vim.keymap.set("n", "<BS>", "<C-^>")
 
--- Copy to system clipboard
-vim.keymap.set("v", "<C-c>", '"+y')
--- Paste from system clipboard with Ctrl + v
-vim.keymap.set("i", "<C-v>", '<Esc>"+p')
--- Move to the end of yanked text after yank and paste
--- vim.keymap.set("v", "p", [["_dP`]])
--- vim.keymap.set("x", "p", [["_dP]])
-vim.keymap.set("n", "x", '"_x')
---  vim.keymap.set("v", "y", "y`]")
---  vim.keymap.set("n", "p", "p`]")
---  vim.keymap.set("v", "p", "p`]")
-
 -- Jump to definition in vertical split
 vim.keymap.set("n", "gv", "<C-W>v<C-]>")
 
 -- Use operator pending mode to visually select the whole buffer
 -- e.g. dA = delete buffer ALL, yA = copy whole buffer ALL
 vim.keymap.set("o", "A", ":<C-U>normal! ggVG<CR>")
--- map c and d to black hole registers
--- vim.keymap.set("n", "d", '"_d', {})
+
+---- smart deletion, dd
+-- It solves the issue, where you want to delete empty line, but dd will override you last yank.
+-- Code above will check if u are deleting empty line, if so - use black hole register.
+-- [src: https://www.reddit.com/r/neovim/comments/w0jzzv/comment/igfjx5y/?utm_source=share&utm_medium=web2x&context=3]
+local function smart_dd()
+	if vim.api.nvim_get_current_line():match("^%s*$") then
+		return '"_dd'
+	else
+		return "dd"
+	end
+end
+vim.keymap.set("n", "dd", smart_dd, { noremap = true, expr = true })
 vim.keymap.set("n", "c", '"_c', {}) -- greatest remap ever
 
 -- This is going to get me cancelled
@@ -43,28 +42,26 @@ vim.keymap.set("i", "<C-c>", "<Esc>")
 vim.cmd([[xnoremap <expr> p 'pgv"' . v:register . 'y`]']])
 
 vim.keymap.set("n", "U", "<C-r>")
-vim.keymap.set("n", "<C-s>", ":noa w<CR>")
 
 vim.keymap.set("n", "a", "empty(getline('.')) ? 'S' : 'a'", { expr = true })
 
-vim.keymap.set(
-	"n",
-	"<leader>o",
-	':<C-u>call append(line("."), repeat([""], v:count1))<CR>',
-	{ desc = "Insert before line" }
-)
-vim.keymap.set(
-	"n",
-	"<leader>O",
-	':<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>',
-	{ desc = "Isert after line" }
-)
+-- vim.keymap.set(
+-- 	"n",
+-- 	"<leader>o",
+-- 	':<C-u>call append(line("."), repeat([""], v:count1))<CR>',
+-- 	{ desc = "Insert before line" }
+-- )
+-- vim.keymap.set(
+-- 	"n",
+-- 	"<leader>O",
+-- 	':<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>',
+-- 	{ desc = "Isert after line" }
+-- )
 
 -- Important: Revert back to previous cursor position
 vim.keymap.set("i", "<esc>", "<esc>`^")
 -- Alt/Meta + u to capitalize the inner word
-vim.keymap.set("n", "<A-u>", "gUiww", { desc = "Capitalize under cursor" })
-vim.keymap.set("n", "<A-l>", "gUiww", { desc = "Lowercase under cursor" })
+vim.keymap.set("n", "<A-u>", "~<Left>", { desc = "Capitalize under cursor" })
 
 -- Keymaps for Nvim tree
 vim.keymap.set("n", "<C-Left>", "<C-w><Left>")
@@ -88,26 +85,12 @@ vim.keymap.set("n", "]b", "<cmd>bnext<cr>", { desc = "Next buffer" })
 vim.keymap.set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 vim.keymap.set("n", "<leader>`", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 
--- Move Lines
--- vim.keymap.set("n", "<A-j>", ":m .+1<CR>==")
--- vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv")
--- vim.keymap.set("i", "<A-j>", "<Esc>:m .+1<CR>==gi")
--- vim.keymap.set("n", "<A-k>", ":m .-2<CR>==")
--- vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv")
--- vim.keymap.set("i", "<A-k>", "<Esc>:m .-2<CR>==gi")
---
--- Switch buffers with <ctrl>
--- vim.keymap.set("n", "<C-Left>", "<cmd>bprevious<cr>")
--- vim.keymap.set("n", "<C-Right>", "<cmd>bnext<cr>")
---
--- Easier pasting
-vim.keymap.set("n", "[p", ":pu!<cr>")
-vim.keymap.set("n", "]p", ":pu<cr>")
-
+-- Fix n and N. Keeping cursor in center
+vim.keymap.set("n", "n", "nzz")
+vim.keymap.set("n", "N", "Nzz")
 -- Clear search with <esc>
 vim.keymap.set({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
-vim.keymap.set("n", "gw", "*N")
-vim.keymap.set("x", "gw", "*N")
+vim.keymap.set({ "n", "x" }, "gw", "*N", { desc = "Search word under cursor" })
 
 -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
 vim.keymap.set("n", "n", "'Nn'[v:searchforward]", { expr = true })
@@ -116,17 +99,15 @@ vim.keymap.set("o", "n", "'Nn'[v:searchforward]", { expr = true })
 vim.keymap.set("n", "N", "'nN'[v:searchforward]", { expr = true })
 vim.keymap.set("x", "N", "'nN'[v:searchforward]", { expr = true })
 vim.keymap.set("o", "N", "'nN'[v:searchforward]", { expr = true })
-
--- save in insert mode
-vim.keymap.set("i", "<C-s>", "<cmd>:w<cr><esc>")
-vim.keymap.set("n", "<C-s>", "<cmd>:w<cr><esc>")
+-- save file
+vim.keymap.set({ "i", "v", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
 
 -- better indenting
 vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("v", ">", ">gv")
 
 -- new file
-vim.keymap.set("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
+vim.keymap.set("n", "<leader>nf", "<cmd>enew<cr>", { desc = "New File" })
 
 -- lazygit
 -- vim.keymap.set("n", "<leader>gg", function()
@@ -146,21 +127,39 @@ vim.keymap.set("n", "<leader>bp", ":BufferLinePick<CR>", { desc = "Pick buffer" 
 
 -- toggle options
 vim.keymap.set("n", "<leader>tf", require("voitd.plugins.lsp.format").toggle, { desc = "Toggle format on Save" })
+
 vim.keymap.set("n", "<leader>ts", function()
 	U.toggle("spell")
 end, { desc = "Toggle Spelling" })
+
 vim.keymap.set("n", "<leader>tw", function()
 	U.toggle("wrap")
 end, { desc = "Toggle Word Wrap" })
+
 vim.keymap.set("n", "<leader>tn", function()
 	U.toggle("relativenumber", true)
 	U.toggle("number")
 end, { desc = "Toggle Line Numbers" })
-vim.keymap.set("n", "<leader>tD", U.toggle_diagnostics, { desc = "Toggle Diagnostics" })
+-- vim.keymap.set("n", "<leader>tD", U.toggle_diagnostics, { desc = "Toggle Diagnostics" })
 local conceallevel = vim.o.conceallevel > 0 and vim.o.conceallevel or 3
 vim.keymap.set("n", "<leader>tc", function()
 	U.toggle("conceallevel", false, { 0, conceallevel })
 end, { desc = "Toggle Conceal" })
+
+vim.keymap.set("n", "<leader>tf", function()
+	U.toggle("foldenable")
+end, { desc = "Toggle fold" })
+
+vim.keymap.set("n", "<leader>ti", ":IndentBlanklineToggle<cr>", { desc = "Toggle indent line" })
+
+vim.keymap.set("n", "K", function()
+	local winid = require("ufo").peekFoldedLinesUnderCursor()
+	if not winid then
+		-- choose one of coc.nvim and nvim lsp
+		vim.fn.CocActionAsync("definitionHover") -- coc.nvim
+		vim.lsp.buf.hover()
+	end
+end)
 
 -- floating terminal
 -- vim.keymap.set("n", "<leader>ft", function()

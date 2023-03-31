@@ -4,11 +4,26 @@ return {
 		"neovim/nvim-lspconfig",
 		event = "BufReadPre",
 		dependencies = {
+			"hrsh7th/cmp-nvim-lsp",
+			"mason.nvim",
 			{ "folke/neoconf.nvim", cmd = "Neoconf", config = true },
 			{ "folke/neodev.nvim", config = true },
-			"mason.nvim",
 			{ "williamboman/mason-lspconfig.nvim", config = { automatic_installation = true } },
-			"hrsh7th/cmp-nvim-lsp",
+			{
+				"jose-elias-alvarez/typescript.nvim",
+				init = function()
+					require("voitd.util").on_attach(function(_, buffer)
+          -- stylua: ignore
+          vim.keymap.set( "n", "<leader>co", "TypescriptOrganizeImports", { buffer = buffer, desc = "Organize Imports" })
+						vim.keymap.set(
+							"n",
+							"<leader>cR",
+							"TypescriptRenameFile",
+							{ desc = "Rename File", buffer = buffer }
+						)
+					end)
+				end,
+			},
 		},
 		---@type lspconfig.options
 		servers = nil,
@@ -27,7 +42,7 @@ return {
 			vim.diagnostic.config({
 				underline = true,
 				update_in_insert = false,
-				virtual_text = { spacing = 4, prefix = "●" },
+				virtual_text = { spacing = 4, prefix = "" },
 				severity_sort = true,
 			})
 
@@ -56,10 +71,11 @@ return {
 			nls.setup({
 				sources = {
 					nls.builtins.code_actions.gitsigns,
+					require("typescript.extensions.null-ls.code-actions"),
 					nls.builtins.formatting.eslint_d,
 					nls.builtins.formatting.prettierd,
 					nls.builtins.formatting.stylua,
-					nls.builtins.diagnostics.flake8,
+					nls.builtins.hover.dictionary,
 				},
 			})
 		end,
@@ -95,4 +111,33 @@ return {
 			end
 		end,
 	},
+	-- inlay hints
+	-- {
+	-- 	"lvimuser/lsp-inlayhints.nvim",
+	-- 	event = "LspAttach",
+	-- 	opts = {},
+	-- 	keys = {
+	-- 		{
+	-- 			"<leader>th",
+	-- 			function()
+	-- 				require("lsp-inlayhints").toggle()
+	-- 			end,
+	--
+	-- 			desc = "Toggle inlay hints",
+	-- 		},
+	-- 	},
+	-- config = function(_, opts)
+	-- 	require("lsp-inlayhints").setup(opts)
+	-- 	vim.api.nvim_create_autocmd("LspAttach", {
+	-- 		group = vim.api.nvim_create_augroup("LspAttach_inlayhints", {}),
+	-- 		callback = function(args)
+	-- 			if not (args.data and args.data.client_id) then
+	-- 				return
+	-- 			end
+	-- 			local client = vim.lsp.get_client_by_id(args.data.client_id)
+	-- 			require("lsp-inlayhints").on_attach(client, args.buf)
+	-- 		end,
+	-- 	})
+	-- 	-- end,
+	-- },
 }

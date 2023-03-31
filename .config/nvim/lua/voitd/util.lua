@@ -57,18 +57,38 @@ function M.get_root()
 	---@cast root string
 	return root
 end
-
+--
+-- this will return a function that calls telescope.
+-- cwd will defautlt to lazyvim.util.get_root
+-- for `files`, git_files or find_files will be chosen depending on .git
 function M.telescope(builtin, opts)
+	local params = { builtin = builtin, opts = opts }
 	return function()
-		opts = vim.tbl_deep_extend("force", {
-			layout_strategy = "vertical",
-			layout_config = { prompt_position = "top", width = 0.5 },
-			sorting_strategy = "ascending",
-		}, opts or {})
-		opts.cwd = M.get_root()
+		builtin = params.builtin
+		opts = params.opts
+		opts = vim.tbl_deep_extend("force", { cwd = M.get_root() }, opts or {})
+		if builtin == "files" then
+			if vim.loop.fs_stat((opts.cwd or vim.loop.cwd()) .. "/.git") then
+				opts.show_untracked = true
+				builtin = "git_files"
+			else
+				builtin = "find_files"
+			end
+		end
 		require("telescope.builtin")[builtin](opts)
 	end
 end
+-- function M.telescope(builtin, opts)
+-- 	return function()
+-- 		opts = vim.tbl_deep_extend("force", {
+-- 			layout_strategy = "vertical",
+-- 			layout_config = { prompt_position = "top", width = 0.5 },
+-- 			sorting_strategy = "ascending",
+-- 		}, opts or {})
+-- 		opts.cwd = M.get_root()
+-- 		require("telescope.builtin")[builtin](opts)
+-- 	end
+-- end
 
 -- function M.float_term(cmd, opts)
 -- 	opts = vim.tbl_deep_extend("force", {
@@ -109,6 +129,7 @@ function M.toggle(option, silent, values)
 end
 
 local enabled = true
+
 function M.toggle_diagnostics()
 	enabled = not enabled
 	if enabled then
@@ -118,5 +139,9 @@ function M.toggle_diagnostics()
 		vim.diagnostic.disable()
 		Util.warn("Disabled diagnostics", { title = "Diagnostics" })
 	end
+end
+
+function M.has(plugin)
+	return require("lazy.core.config").plugins[plugin] ~= nil
 end
 return M

@@ -81,6 +81,9 @@ symbol = "+ "
 symbol_threshold=2
 disabled=true
 
+[git_metrics]
+disabled = false
+format = '([+$added]($added_style)) ([-$deleted]($deleted_style)) '
 
 [username]
 #style_user = "white bold bg:green"

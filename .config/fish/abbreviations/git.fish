@@ -60,7 +60,8 @@ abbr -ag gfa "git fetch --agll --prune"
 abbr -ag gl "git pull"
 abbr -ag glr "git pull --rebase"
 
-abbr -ag glg "git log --stat --max-count=10"
+abbr -ag gl "git log --stat --max-count=10"
+abbr -ag glg "log --color --graph --pretty=format:'%C(yellow)%h%Creset %s %C(bold green)%ar%Creset %C(bold blue)%an%Creset%C(bold red)%d%Creset' -n 16"
 abbr -ag glgg "git log --graph --max-count=10"
 abbr -ag glgga "git log --graph --decorate --all"
 abbr -ag glo "git log --oneline --decorate --color"
@@ -104,8 +105,8 @@ abbr -ag grss "git restore --source"
 
 abbr -ag gsh "git show"
 
-abbr -ag gss "git status -s"
-abbr -ag gst "git status"
+abbr -ag gst "git status -s -b"
+abbr -ag gs "git status"
 
 abbr -ag gsta "git stash"
 abbr -ag gstd "git stash drop"
@@ -124,5 +125,6 @@ abbr -ag gswc "git switch --create"
 
 abbr -ag gwch "git whatchanged -p --agbbrev-commit --pretty=medium"
 
+#abbr -ag gcm "!f() { git commit -a -m \"$*\" ; }; f"
 abbr -ag gco "git checkout"
 abbr -ag gcb "git checkout -b"

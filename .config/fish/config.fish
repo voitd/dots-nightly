@@ -7,7 +7,7 @@ set fish_greeting ""
 starship init fish | source
 
 #set -gx TERM xterm-256color
-
+set -gx OPENAI_API_KEY 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
 #export TERMINAL="kitty"
 
 # Colored man-pages

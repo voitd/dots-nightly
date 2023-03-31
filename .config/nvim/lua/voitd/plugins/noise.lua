@@ -17,6 +17,10 @@ function M.config()
 	})
 	require("noice").setup({
 		debug = false,
+		notify = {
+			enabled = false,
+			view = "notify",
+		},
 		lsp = {
 			override = {
 				["vim.lsp.util.convert_input_to_markdown_lines"] = true,
@@ -42,11 +46,18 @@ function M.config()
 				view = "mini",
 			},
 		},
+		cmdline = {
+			view = "cmdline",
+		},
+		popupmenu = {
+			---@type 'nui'|'cmp'
+			backend = "cmp", -- backend to use to show regular cmdline completions
+		},
 		presets = {
 			bottom_search = true,
 			command_palette = true,
 			long_message_to_split = true,
-			inc_rename = true,
+			-- inc_rename = true,
 			cmdline_output_to_split = false,
 		},
 		commands = {

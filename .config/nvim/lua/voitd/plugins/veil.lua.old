@@ -1,0 +1,103 @@
+-- local current_day = os.date("%A")
+-- https://github.com/coopikoop/nvim-config/blob/48ea863df1d86581ef59ff4484369927c462acda/lua/coop/config/veil/animations/days.lua
+-- local days_of_week = require("coop.config.veil.animations.days")
+-- builtin.sections.animated(days_of_week[current_day], {
+
+local builtin = require("veil.builtin")
+
+local stats = require("lazy").stats()
+local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+
+local opts = {
+	sections = {
+		builtin.sections.animated(builtin.headers.frames_nvim, {
+			hl = { fg = "#5de4c7" },
+		}),
+		builtin.sections.buttons({
+			{
+				icon = "",
+				text = "Recent Files",
+				shortcut = "r",
+				callback = function()
+					require("telescope.builtin").oldfiles()
+				end,
+			},
+			{
+				icon = "",
+				text = "Last Session",
+				shortcut = "s",
+				callback = function()
+					require("persistence").load({ last = true })
+				end,
+			},
+			{
+				icon = "",
+				text = "Find Files",
+				shortcut = "f",
+				callback = function()
+					require("telescope.builtin").find_files()
+				end,
+			},
+			{
+				icon = "",
+				text = "Find Words",
+				shortcut = "w",
+				callback = function()
+					require("telescope.builtin").live_grep()
+				end,
+			},
+			{
+				icon = "",
+				text = "Buffers",
+				shortcut = "b",
+				callback = function()
+					require("telescope.builtin").buffers()
+				end,
+			},
+			{
+				icon = "",
+				text = "Configuration",
+				shortcut = "i",
+				callback = function()
+					vim.cmd("edit $MYVIMRC")
+				end,
+			},
+			{
+				icon = "󰤄",
+				text = "Lazy",
+				shortcut = "l",
+				callback = function()
+					require("lazy").home()
+				end,
+			},
+			{
+				icon = "",
+				text = "Mason",
+				shortcut = "m",
+				callback = function()
+					vim.cmd("Mason")
+				end,
+			},
+			{
+				icon = "",
+				text = "Quit Neovim",
+				shortcut = "q",
+				callback = function()
+					vim.cmd("qa")
+				end,
+			},
+		}),
+		builtin.sections.padding(1),
+		builtin.sections.buttons({
+			{
+				icon = "⚡",
+				text = string.format("Neovim loaded %d plugins in %.2f ms", stats.count, ms),
+			},
+		}),
+	},
+	mappings = {},
+	startup = true,
+	listed = false,
+}
+
+return opts
